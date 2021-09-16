@@ -1,0 +1,83 @@
+.body-min-height {
+    min-height: calc(100vh - 267px);
+}
+
+.no-border {
+    border: none !important;
+    border-style: none;
+}
+
+.no-box-shadow {
+    box-shadow: none !important;
+}
+
+#crypto_chart {
+    height: 100%;
+    min-height: 500px;
+}
+
+.border-panel {
+    border: solid 1px #252525 !important;
+}
+
+.border-symbol {
+    border: solid 1px #4d545a !important;
+}
+
+.tab-border-right {
+    border-right: solid 1px;
+    padding-right: 0 !important;
+}
+
+.input-dark-bg {
+    background-color: #2e3133 !important;
+    border: none !important;
+}
+
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+}
+
+.no-float {
+    float: none !important;
+}
+
+.buy-b-r { border-radius: 5px 0 0 5px !important; }
+.sell-b-r { border-radius: 0 5px 5px 0 !important; }
+
+.trading-list tbody td {
+    padding: 0.2rem 1rem !important;
+}
+
+.direction-right { direction: rtl; }
+.direction-left { direction: ltr; }
+
+.sub-date {
+    color: #C2C2C2;
+}
+
+.news-item a {
+    color: white;
+}
+
+.news-item a:hover {
+    color: #f8b21c;
+}
+
+.trading-border-left {
+    border-left: 1px solid #585858 !important;
+    border-right: 1px solid #585858 !important;
+}
+
+.text-info-disable {
+    color: #15687d !important;
+}
+
+.text-danger-disable {
+    color: #7d1d20 !important;
+}
+
+.currency-span {
+    min-width: 75px;
+    text-align: center;
+}
