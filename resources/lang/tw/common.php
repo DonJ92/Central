@@ -100,5 +100,7 @@ return [
     'order' => [
         'buy' => '買',
         'sell' => '賣',
-    ]
+    ],
+
+    'date_placeholder' => '月/日/年',
 ];

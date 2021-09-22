@@ -17,6 +17,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/plugins.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+    <!-- Bootstrap datetimepicker css -->
+    <link href="{{ asset('plugins/bootstrap-datetimepicker/tempusdominus-bootstrap-4.css') }}" rel="stylesheet">
 </head>
 <body>
     <!-- Body Inner -->
@@ -59,18 +62,18 @@
                         <div class="container">
                             <nav>
                                 <ul>
-                                    <li><a href="{{ route('/') }}"><i class="fa fa-home"></i>{{ trans('common.top_menu.home') }}</a></li>
-                                    <li><a href="{{ route('news') }}"><i class="fas fa-newspaper"></i>{{ trans('common.top_menu.news') }}</a></li>
-                                    <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>{{ trans('common.top_menu.exchange') }}</a></li>
-                                    <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>{{ trans('common.top_menu.dealer') }}</a></li>
+                                    <li><a id="top_home" href="{{ route('/') }}"><i class="fa fa-home"></i>{{ trans('common.top_menu.home') }}</a></li>
+                                    <li><a id="top_news" href="{{ route('news') }}"><i class="fas fa-newspaper"></i>{{ trans('common.top_menu.news') }}</a></li>
+                                    <li><a id="top_exchange" href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>{{ trans('common.top_menu.exchange') }}</a></li>
+                                    <li><a id="top_dealer" href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>{{ trans('common.top_menu.dealer') }}</a></li>
                                     <!--<li><a href="">Overview</a></li>
                                     <li><a href="">Services</a></li>
                                     <li><a href="">How to Use</a></li>-->
-                                    <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>{{ trans('common.top_menu.faq') }}</a></li>
-                                    <li><a href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>{{ trans('common.top_menu.contactus') }}</a></li>
+                                    <li><a id="top_faq" href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>{{ trans('common.top_menu.faq') }}</a></li>
+                                    <li><a id="top_contactus" href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>{{ trans('common.top_menu.contactus') }}</a></li>
                                     @guest
-                                    <li><a href="{{ route('login') }}"><i class="icon-log-in"> </i>{{ trans('common.top_menu.login') }}</a></li>
-                                    <li><a href="{{ route('register') }}"><i class="icon-user-plus"> </i>{{ trans('common.top_menu.register') }}</a></li>
+                                    <li><a id="top_login" href="{{ route('login') }}"><i class="icon-log-in"> </i>{{ trans('common.top_menu.login') }}</a></li>
+                                    <li><a id="top_register" href="{{ route('register') }}"><i class="icon-user-plus"> </i>{{ trans('common.top_menu.register') }}</a></li>
                                     @else
                                     <li><a href="{{ route('logout') }}"
                                            onclick="event.preventDefault();

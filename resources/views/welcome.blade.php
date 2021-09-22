@@ -167,3 +167,11 @@
     </section>
     <!-- end: WELCOME -->
 @endsection
+
+@section('script')
+    <script>
+        $( document ).ready(function() {
+            $('#top_home').addClass('text-danger');
+        });
+    </script>
+@endsection

@@ -100,5 +100,7 @@ return [
     'order' => [
         'buy' => 'Купить',
         'sell' => 'Продавать',
-    ]
+    ],
+
+    'date_placeholder' => 'MM/DD/YYYY',
 ];

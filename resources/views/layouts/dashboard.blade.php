@@ -15,8 +15,6 @@
 
     <!--Datatables plugin files-->
     <link href="{{ asset('plugins/datatables/datatables.min.css') }}" rel="stylesheet">
-    <!--Bootstrap switch files-->
-    <link href="{{ asset('plugins/bootstrap-switch/bootstrap-switch.css') }}" rel="stylesheet">
     <!--Toastr switch files-->
     <link href="{{ asset('plugins/toastr/toastr.min.css') }}" rel="stylesheet" >
 
@@ -24,6 +22,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/plugins.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+    <!-- Bootstrap datetimepicker css -->
+    <link href="{{ asset('plugins/bootstrap-datetimepicker/tempusdominus-bootstrap-4.css') }}" rel="stylesheet">
 </head>
 <body>
 <!-- Body Inner -->
@@ -88,14 +89,14 @@
                     <div class="container">
                         <nav>
                             <ul>
-                                <li><a href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>{{ trans('common.top_menu.dashboard') }}</a></li>
-                                <li><a href="{{ route('news') }}"><i class="fas fa-newspaper"></i>{{ trans('common.top_menu.news') }}</a></li>
-                                <li><a href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>{{ trans('common.top_menu.exchange') }}</a></li>
-                                <li><a href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>{{ trans('common.top_menu.dealer') }}</a></li>
-<!--                                <li><a href="{{ route('payment') }}"><i class="fa fa-wallet"></i>{{ trans('common.top_menu.payment') }}</a></li>-->
-                                <li><a href="{{ route('report') }}"><i class="fa fa-file-alt"></i>{{ trans('common.top_menu.report') }}</a></li>
-                                <li><a href="{{ route('setting') }}"><i class="fa fa-cog"></i>{{ trans('common.top_menu.setting') }}</a></li>
-                                <li><a href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>{{ trans('common.top_menu.faq') }}</a></li>
+                                <li><a id="top_dashboard" href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>{{ trans('common.top_menu.dashboard') }}</a></li>
+                                <li><a id="top_news" href="{{ route('news') }}"><i class="fas fa-newspaper"></i>{{ trans('common.top_menu.news') }}</a></li>
+                                <li><a id="top_exchange" href="{{ route('exchange') }}"><i class="fa fa-chart-bar"></i>{{ trans('common.top_menu.exchange') }}</a></li>
+                                <li><a id="top_dealer" href="{{ route('dealer') }}"><i class="fa fa-money-bill-wave"></i>{{ trans('common.top_menu.dealer') }}</a></li>
+<!--                                <li><a id="top_payment"  href="{{ route('payment') }}"><i class="fa fa-wallet"></i>{{ trans('common.top_menu.payment') }}</a></li>-->
+                                <li><a id="top_report" href="{{ route('report') }}"><i class="fa fa-file-alt"></i>{{ trans('common.top_menu.report') }}</a></li>
+                                <li><a id="top_setting" href="{{ route('setting') }}"><i class="fa fa-cog"></i>{{ trans('common.top_menu.setting') }}</a></li>
+                                <li><a id="top_faq" href="{{ route('faq') }}"><i class="fa fa-question-circle"></i>{{ trans('common.top_menu.faq') }}</a></li>
 <!--                                <li><a href="{{ route('contactus') }}"><i class="fas fa-envelope"></i>{{ trans('common.top_menu.contactus') }}</a></li>-->
                                 <li class="dropdown"><a href="#"><img src="{{ auth()->user()->avatar ? auth()->user()->avatar : asset('images/user-avatar.png') }}" class="avatar avatar-lg m-r-5"><span>{{ Auth::user()->name }}</span></a>
                                     <ul class="dropdown-menu background-black-dark border-panel">
@@ -169,17 +170,15 @@
 
 <script src="{{ asset('js/jquery.js') }}"></script>
 <script src="{{ asset('js/plugins.js') }}"></script>
+<!--Template functions-->
+<script src="{{ asset('js/functions.js') }}"></script>
 
 <!--Toastr plugin files-->
 <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
 <!--Clipboard plugin files-->
 <script src="{{ asset('plugins/clipboard/clipboard.min.js') }}"></script>
-<!--Template functions-->
-<script src="{{ asset('js/functions.js') }}"></script>
 <!--Datatables plugin files-->
 <script src="{{ asset('plugins/datatables/datatables.min.js') }}"></script>
-<!--Bootstrap switch files-->
-<script src="{{ asset('plugins/bootstrap-switch/bootstrap-switch.min.js') }}"></script>
 
 <script>
     $(document).on("click", function(event){

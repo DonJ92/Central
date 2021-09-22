@@ -53,9 +53,9 @@ class RegisterController extends Controller
         $gender_list = config('constants.gender_list');
         $data['gender_list'] = $gender_list;
 
-        $country_response = Http::get('https://restcountries.eu/rest/v2/all');
+        $country_response = Http::get('https://api.first.org/data/v1/countries');
         $country_list = $country_response->json();
-        $data['country_list'] = $country_list;
+        $data['country_list'] = $country_list['data'];
 
         $language_list = config('constants.language_list');
         $data['language_list'] = $language_list;
@@ -116,7 +116,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'birthday' => $data['birthday'],
+            'birthday' => date('Y-m-d', strtotime($data['birthday'])),
             'gender' => $data['gender'],
             'mobile' => $data['mobile'],
             'country' => $data['country'],
@@ -135,12 +135,13 @@ class RegisterController extends Controller
 
         $insert_data = array();
         foreach ($cryptocurrency_list as $cryptocurrency_info)
-            $insert_data[] = [
-                'user_id' => $user->id,
-                'currency' => $cryptocurrency_info['currency'],
-                'balance' => 0,
-                'status' => config('constants.balance_status.valid'),
-            ];
+            if ($cryptocurrency_info['use_deposit'] == config('constants.use_deposit.enable'))
+                $insert_data[] = [
+                    'user_id' => $user->id,
+                    'currency' => $cryptocurrency_info['currency'],
+                    'balance' => 0,
+                    'status' => config('constants.balance_status.valid'),
+                ];
 
         try {
             UserBalance::insert($insert_data);

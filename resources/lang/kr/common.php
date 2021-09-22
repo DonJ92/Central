@@ -100,5 +100,7 @@ return [
     'order' => [
         'buy' => 'Buy',
         'sell' => 'Sell',
-    ]
+    ],
+
+    'date_placeholder' => '월/일/년',
 ];

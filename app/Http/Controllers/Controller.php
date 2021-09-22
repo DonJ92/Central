@@ -33,7 +33,10 @@ class Controller extends BaseController
         $cryptocurrency_list = array();
 
         try {
-            $cryptocurrency_list = CryptoSettings::where('status', config('constants.crypto_setting_status.valid'))->get()->toArray();
+            $cryptocurrency_list = CryptoSettings::leftjoin('ct_crypto_usages', 'ct_crypto_settings.currency', '=', 'ct_crypto_usages.currency')
+                ->where('ct_crypto_settings.status', config('constants.crypto_setting_status.valid'))
+                ->select('ct_crypto_settings.*', 'ct_crypto_usages.use_deposit', 'ct_crypto_usages.use_withdraw')
+                ->get()->toArray();
         } catch (QueryException $e) {
             Log::error($e->getMessage());
             return $cryptocurrency_list;
@@ -109,10 +112,9 @@ class Controller extends BaseController
         $cryptocurrency_list = array();
 
         try {
-            $cryptocurrency_list = CryptoSettings::leftjoin('ct_users_balance', 'ct_crypto_settings.currency', '=', 'ct_users_balance.currency')
+            $cryptocurrency_list = CryptoSettings::leftjoin('ct_crypto_usages', 'ct_crypto_settings.currency', '=', 'ct_crypto_usages.currency')
                 ->where('ct_crypto_settings.status', config('constants.crypto_setting_status.valid'))
-                ->where('ct_users_balance.user_id', $user->id)
-                ->select('ct_crypto_settings.*', 'ct_users_balance.balance')
+                ->select('ct_crypto_settings.*', 'ct_crypto_usages.use_deposit', 'ct_crypto_usages.use_withdraw')
                 ->get()->toArray();
         } catch (QueryException $e) {
             Log::error($e->getMessage());
@@ -121,8 +123,8 @@ class Controller extends BaseController
 
         for ($i = 0; $i < count($cryptocurrency_list); $i++) {
             $available_balance = $this->getAvailableBalanceFromCurrency($cryptocurrency_list[$i]['currency']);
-            $cryptocurrency_list[$i]['available_balance'] = _number_format($available_balance['balance'], $cryptocurrency_list[$i]['rate_decimals']);
-            $cryptocurrency_list[$i]['balance'] = _number_format($cryptocurrency_list[$i]['balance'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['available_balance'] = _number_format($available_balance['available_balance'], $cryptocurrency_list[$i]['rate_decimals']);
+            $cryptocurrency_list[$i]['balance'] = _number_format($available_balance['balance'], $cryptocurrency_list[$i]['rate_decimals']);
 //            $cryptocurrency_list[$i]['cashback'] = _number_format($cryptocurrency_list[$i]['cashback'], $cryptocurrency_list[$i]['rate_decimals']);
             $cryptocurrency_list[$i]['min_deposit'] = _number_format($cryptocurrency_list[$i]['min_deposit'], $cryptocurrency_list[$i]['rate_decimals']);
             $cryptocurrency_list[$i]['min_withdraw'] = _number_format($cryptocurrency_list[$i]['min_withdraw'], $cryptocurrency_list[$i]['rate_decimals']);
@@ -180,30 +182,9 @@ class Controller extends BaseController
 
         for ($i = 0; $i < count($balance_list); $i++) {
             $available_balance = $this->getAvailableBalanceFromCurrency($balance_list[$i]['currency']);
-            $balance_list[$i]['available_balance'] = _number_format2($available_balance['balance'], $balance_list[$i]['rate_decimals']);
+            $balance_list[$i]['available_balance'] = _number_format2($available_balance['available_balance'], $balance_list[$i]['rate_decimals']);
             $balance_list[$i]['balance_amount'] = _number_format2($balance_list[$i]['balance'], $balance_list[$i]['rate_decimals']);
             $balance_list[$i]['balance'] = _number_format($balance_list[$i]['balance'], $balance_list[$i]['rate_decimals']);
-
-            if ($balance_list[$i]['currency'] == 'BTC')
-                $balance_list[$i]['ico'] = asset('/icons/btc.svg');
-            else if ($balance_list[$i]['currency'] == 'ETH')
-                $balance_list[$i]['ico'] = asset('/icons/eth.svg');
-            else if ($balance_list[$i]['currency'] == 'XRP')
-                $balance_list[$i]['ico'] = asset('/icons/xrp.svg');
-            else if ($balance_list[$i]['currency'] == 'LTC')
-                $balance_list[$i]['ico'] = asset('/icons/ltc.svg');
-            else if ($balance_list[$i]['currency'] == 'USDT')
-                $balance_list[$i]['ico'] = asset('/icons/usdt.svg');
-            else if ($balance_list[$i]['currency'] == 'ADAB')
-                $balance_list[$i]['ico'] = asset('/icons/ada.svg');
-            else if ($balance_list[$i]['currency'] == 'WIZ+')
-                $balance_list[$i]['ico'] = asset('/icons/wiz+.svg');
-            else if ($balance_list[$i]['currency'] == '8CO')
-                $balance_list[$i]['ico'] = asset('/icons/8co.png');
-            else if ($balance_list[$i]['currency'] == 'JCC')
-                $balance_list[$i]['ico'] = asset('/icons/jcc.png');
-            else
-                $balance_list[$i]['ico'] = asset('/icons/btc.svg');
         }
 
         return $balance_list;
@@ -257,6 +238,7 @@ class Controller extends BaseController
         $user = Auth::user();
 
         $balance = $this->getBalanceFromCurrency($currency);
+        $balance['available_balance'] = $balance['balance'];
 
         try {
             $order_pending_list = OrderHistory::leftjoin('ct_currencies', 'ct_currencies.id', '=', 'ct_order_history.currency')
@@ -278,17 +260,7 @@ class Controller extends BaseController
                     $order_pending_amount = $order_pending_amount + ($order_pending_info['order_amount'] * $order_pending_info['order_price']) ;
             }
 
-            $withdraw_pending_list = Withdraw::where('user_id', $user->id)
-                ->where('currency', $currency)
-                ->where('status', config('constants.withdraw_status.requested'))
-                ->get()->toArray();
-
-            $withdraw_pending_amount = 0;
-            foreach ($withdraw_pending_list as $withdraw_pending_info) {
-                $withdraw_pending_amount = $withdraw_pending_amount + $withdraw_pending_info['amount'];
-            }
-
-            $balance['balance'] = $balance['balance'] - $order_pending_amount - $withdraw_pending_amount;
+            $balance['available_balance'] = $balance['available_balance'] - $order_pending_amount;
         } catch (QueryException $e) {
             Log::error($e->getMessage());
             return $balance;
