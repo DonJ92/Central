@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CountryList;
 use App\Models\CryptoSettings;
 use App\Models\Currency;
 use App\Models\DailyFluct;
@@ -44,7 +45,7 @@ class Controller extends BaseController
 
         for ($i = 0; $i < count($cryptocurrency_list); $i++) {
 
-/*            $cryptocurrency_list[$i]['cashback'] = _number_format($cryptocurrency_list[$i]['cashback'], $cryptocurrency_list[$i]['rate_decimals']);*/
+            /*            $cryptocurrency_list[$i]['cashback'] = _number_format($cryptocurrency_list[$i]['cashback'], $cryptocurrency_list[$i]['rate_decimals']);*/
             $cryptocurrency_list[$i]['min_deposit'] = _number_format($cryptocurrency_list[$i]['min_deposit'], $cryptocurrency_list[$i]['rate_decimals']);
             $cryptocurrency_list[$i]['min_withdraw'] = _number_format($cryptocurrency_list[$i]['min_withdraw'], $cryptocurrency_list[$i]['rate_decimals']);
             $cryptocurrency_list[$i]['transfer_fee'] = _number_format($cryptocurrency_list[$i]['transfer_fee'], $cryptocurrency_list[$i]['rate_decimals']);
@@ -243,7 +244,7 @@ class Controller extends BaseController
         try {
             $order_pending_list = OrderHistory::leftjoin('ct_currencies', 'ct_currencies.id', '=', 'ct_order_history.currency')
                 ->where('ct_order_history.user_id', $user->id)
-                ->where('ct_currencies.currency', 'like', '%'.$currency.'%')
+                ->where('ct_currencies.currency', 'like', '%' . $currency . '%')
                 ->where(function ($query) {
                     $query->where('ct_order_history.status', config('constants.order_status.pending'))
                         ->orWhere('ct_order_history.status', config('constants.order_status.canceling'));
@@ -257,7 +258,7 @@ class Controller extends BaseController
                 if ($currencies['0'] == $currency && $order_pending_info['signal'] == config('constants.order_type.sell'))
                     $order_pending_amount = $order_pending_amount + $order_pending_info['order_amount'];
                 elseif ($currencies['1'] == $currency && $order_pending_info['signal'] == config('constants.order_type.buy'))
-                    $order_pending_amount = $order_pending_amount + ($order_pending_info['order_amount'] * $order_pending_info['order_price']) ;
+                    $order_pending_amount = $order_pending_amount + ($order_pending_info['order_amount'] * $order_pending_info['order_price']);
             }
 
             $balance['available_balance'] = $balance['available_balance'] - $order_pending_amount;
@@ -555,5 +556,24 @@ class Controller extends BaseController
         }
 
         return $kyc_infos;
+    }
+
+    /**
+     * get country list
+     *
+     * @return array
+     */
+    protected function getCountryList()
+    {
+        $country_list = array();
+        try {
+            $country_list = CountryList::orderby('name', 'asc')
+                ->get()->toArray();
+        } catch (QueryException $e) {
+            Log::error($e->getMessage());
+            return $country_list;
+        }
+
+        return $country_list;
     }
 }
